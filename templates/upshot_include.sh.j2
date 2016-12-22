@@ -2,7 +2,12 @@
 #
 # Common functions
 #
-MDATA_GET={{ mdata_get_path }}; export MDATA_GET
+if [ "$EUID" -ne 0 ]; then
+  MDATA_GET="sudo {{ mdata_get_path }}"
+else
+  MDATA_GET="{{ mdata_get_path }}"
+fi
+export MDATA_GET
 PORT="${`${MDATA_GET} vcap_port`:-3000}"
 CF_INSTANCE_IP="`hostname --ip-address`"
 CF_INSTANCE_ADDR="${CF_INSTANCE_IP}:${PORT}"
