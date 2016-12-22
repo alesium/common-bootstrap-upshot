@@ -1,8 +1,43 @@
 ---
 
-  - name: include Linux
-    include: Linux.yml
-    when: os == "Linux"
+  - name: install libselinux-python package
+    yum: name="libselinux-python" state="present"
+
+  - name: disable SELinux in conf file
+    selinux: state=disabled
+
+  - name: install epel
+    yum: name="epel-release" state="present"
+
+  - name: upgrade all packages
+    yum: name=* state=latest
+
+  - name: remove unused packages
+    yum: name={{ item }} state=absent
+    with_items:
+      - sendmail
+
+  - name: stop unused services
+    service: name={{ item }} enabled=no state=stopped
+    ignore_errors: True
+    with_items:
+      - acpid
+      - cpuspeed
+      - haldaemon
+      - messagebus
+      - nfslock
+      - rpcgssd
+      - rpcidmapd
+      - certmonger
+      - cups
+      - portreserve
+      - rpcbind
+
+  - name: setup clock
+    command: echo 'ZONE="{{ timezone }}"' > /etc/sysconfig/clock
+
+  - name: setup timezone
+    file: src="/usr/share/zoneinfo/{{ timezone }}" dest="/etc/localtime" state="link" force="yes"
 
   - name: ensure /home exists
     file: dest="/home" state="directory" owner="root" group="root" mode="0755"
@@ -24,4 +59,4 @@
     template: src="bashrc.j2" dest="/home/vcap/.bashrc" owner="vcap" group="vcap"
 
   - name: upload upshot_include
-    template: src="upshot_include.sh.j2" dest="/usr/lib/upshot_include.sh" owner="root" group="root" mode="0755" 
+    template: src="upshot_include.sh.j2" dest="/usr/lib/upshot_include.sh" owner="root" group="root" mode="0755"
