@@ -18,7 +18,7 @@ if [[ ! -d ${ANSIBLE_BASE}/ansible-${ANSIBLE_VERSION} ]]; then
         rm ${ANSIBLE_BASE}/ansible-${ANSIBLE_VERSION}.tar.gz
 fi
 PATH=${ANSIBLE_PATH}/bin:$PATH; export PATH
-PYTHONPATH=${ANSIBLEPATH}/lib; export PYTHONPATH
+PYTHONPATH=${ANSIBLE_PATH}/lib; export PYTHONPATH
 LANG=C; export LANG
 
 echo "localhost" > ${ANSIBLE_HOSTFILE}
