@@ -14,6 +14,9 @@ if [[ ! -d ${ANSIBLE_BASE}/ansible-${ANSIBLE_VERSION} ]]; then
         cd ${ANSIBLE_BASE}
         curl -O ${ANSIBLE_PKG}
         tar xfz ansible-${ANSIBLE_VERSION}.tar.gz
+        if [ -L ${ANSIBLE_PATH} ]; then
+          rm ${ANSIBLE_PATH}
+        fi
         ln -s  ${ANSIBLE_BASE}/ansible-${ANSIBLE_VERSION} ${ANSIBLE_PATH}
         rm ${ANSIBLE_BASE}/ansible-${ANSIBLE_VERSION}.tar.gz
 fi
