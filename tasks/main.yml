@@ -24,7 +24,6 @@
       - acpid
       - cpuspeed
       - haldaemon
-      - messagebus
       - nfslock
       - rpcgssd
       - rpcidmapd
