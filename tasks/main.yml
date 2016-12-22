@@ -1,0 +1,27 @@
+---
+
+  - name: include Linux
+    include: Linux.yml
+    when: os == "Linux"
+
+  - name: ensure /home exists
+    file: dest="/home" state="directory" owner="root" group="root" mode="0755"
+
+  - name: "generate random password"
+    command: "openssl rand -base64 16"
+    register: ansible_password
+
+  - name: create vcap group
+    group: name="vcap" gid="1000" state="present"
+
+  - name: create vcap user
+    user: name="vcap" uid="1000" comment="vcap user" createhome="yes" home="/home/vcap" group="vcap" password="{{ ansible_password.stdout }}"
+
+  - name: enable sudo mdata for vcap
+    template: src="sudoers.d/vcap.j2" dest="{{ pkg_prefix_path }}/etc/sudoers.d/vcap" mode="0440"
+
+  - name: overwrite vcap .bashrc
+    template: src="bashrc.j2" dest="/home/vcap/.bashrc" owner="vcap" group="vcap"
+
+  - name: upload upshot_include
+    template: src="upshot_include.sh.j2" dest="/usr/lib/upshot_include.sh" owner="root" group="root" mode="0755" 

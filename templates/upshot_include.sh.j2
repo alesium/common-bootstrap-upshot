@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Common functions
+#
+MDATA_GET={{ mdata_get_path }}; export MDATA_GET
+PORT="${`${MDATA_GET} vcap_port`:-3000}"
+CF_INSTANCE_IP="`hostname --ip-address`"
+CF_INSTANCE_ADDR="${CF_INSTANCE_IP}:${PORT}"
+CF_INSTANCE_GUID="`${MDATA_GET} sdc:uuid`"
+CF_INSTANCE_INDEX=0
+CF_INSTANCE_INTERNAL_IP="${CF_INSTANCE_IP}"
+CF_INSTANCE_PORT="${PORT}"
+CF_INSTANCE_PORTS="{}"
+MEMORY_LIMIT="`free -m | grep Mem| awk '{print $2}'`m"
+VCAP_APP_HOST="0.0.0.0"
+VCAP_APP_PORT="${PORT}"
+VCAP_APPLICATION="${`${MDATA_GET} vcap_application`:-{}}"
+VCAP_SERVICES="${`${MDATA_GET} vcap_services`:-{}}"
+
+export MDATA_GET PORT CF_INSTANCE_IP CF_INSTANCE_ADDR CF_INSTANCE_GUID CF_INSTANCE_INDEX CF_INSTANCE_INTERNAL_IP CF_INSTANCE_PORT CF_INSTANCE_PORTS MEMORY_LIMIT VCAP_APP_HOST VCAP_APP_PORT VCAP_APPLICATION VCAP_SERVICES
+
+function upshot_overwrite_authorized_keys
+{
+    ${MDATA_GET} ${1} > ${2}
+    chmod 0600 ${2}
+
+}

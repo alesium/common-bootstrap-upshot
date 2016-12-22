@@ -1,0 +1,7 @@
+wheel_group_name: wheel
+bash_location: /bin/bash
+pkg_prefix_path: /
+aliases_path: "/etc/aliases"
+ssh_service: "sshd"
+mdata_get_path: "/lib/smartdc/mdata-get"
+timezone: "America/Montreal"
