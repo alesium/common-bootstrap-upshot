@@ -62,12 +62,9 @@
 
   - name: setup local facts
     file: dest="/etc/ansible/facts.d" recurse="yes" state="directory"
-    tags:
-
+    
   - name: install custom facts
     template: src="common_upshot.fact.j2" dest="/etc/ansible/facts.d" mode="0755" owner="root"
 
   - name: reload local facts
     setup: filter="ansible_local"
-    tags:
-        - always
