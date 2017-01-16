@@ -1,10 +1,11 @@
 #!/bin/bash
 
-. /usr/lib/upshot_include.sh
+. /usr/lib/upshot/vcap_include.sh
 
 cat << EOF
 {
   "upshot_user": "{{ upshot_user }}",
+  "upshot_home"	"{{ upshot_home }}",
   "PORT": "$PORT",
   "CF_INSTANCE_IP": "$CF_INSTANCE_IP",
   "CF_INSTANCE_GUID": "$CF_INSTANCE_GUID",

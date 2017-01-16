@@ -1,17 +1,7 @@
-#!/bin/bash
+#!/bin/bash	
 #
-# Common functions
-#
-function mdata_get_wrapper ()
-{
-        ${MDATA_GET} $1 2>/dev/null
-}
-if [ "$EUID" -ne 0 ]; then
-  MDATA_GET="sudo /usr/sbin/mdata-get"
-else
-  MDATA_GET="/usr/sbin/mdata-get"
-fi
-export MDATA_GET
+. /usr/lib/upshot/common_include.sh
+
 MDATA_PORT=`mdata_get_wrapper vcap_port`
 MDATA_VCAP_APPLICATION=`mdata_get_wrapper vcap_application`
 MDATA_VCAP_SERVICES=`mdata_get_wrapper vcap_services`
@@ -32,16 +22,3 @@ VCAP_APPLICATION=${MDATA_VCAP_APPLICATION:-{}}
 VCAP_SERVICES=${MDATA_VCAP_SERVICES:-{}}
 
 export MDATA_GET PORT CF_INSTANCE_IP CF_INSTANCE_ADDR CF_INSTANCE_GUID CF_INSTANCE_INDEX CF_INSTANCE_INTERNAL_IP CF_INSTANCE_PORT CF_INSTANCE_PORTS MEMORY_LIMIT VCAP_APP_HOST VCAP_APP_PORT VCAP_APPLICATION VCAP_SERVICES
-
-
-function upshot_overwrite_authorized_keys ()
-{
-    target_dir=$(dirname $2)
-    if [ ! -d $target_dir ]; then
-       mkdir -p $target_dir
-       chmod 0700 $target_dir
-    fi
-    mdata_get_wrapper $1 > $2
-    chmod 0600 ${2}
-
-}

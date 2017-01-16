@@ -1,0 +1,17 @@
+[Unit]
+Description=Upshot restart services
+After=network.target
+ConditionPathExistsGlob={{ upshot_home }}
+
+[Service]
+# Foreground process (do not use --daemon in ExecStart or config.rb)
+Type=oneshot
+# Preferably configure a non-privileged user
+User={{ upshot_user }}
+# Specify the path to your puma application root
+WorkingDirectory={{ upshot_home }}
+
+ExecStart=/usr/lib/upshot/reset_sshkey.sh
+
+[Install]
+WantedBy=multi-user.target

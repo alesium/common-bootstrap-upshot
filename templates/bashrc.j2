@@ -1,4 +1,4 @@
-. /usr/lib/upshot_include.sh
+. /usr/lib/upshot/vcap_include.sh
 
 if [ "$PS1" ]; then
         shopt -s checkwinsize cdspell extglob histappend
@@ -11,8 +11,3 @@ if [ "$PS1" ]; then
                 PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%\.*} \007" && history -a'
         fi
 fi
-
-
-# overwrite authorized_keys
-#
-upshot_overwrite_authorized_keys root_authorized_keys ${HOME}/.ssh/authorized_keys
