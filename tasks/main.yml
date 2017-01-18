@@ -61,6 +61,9 @@
   - name: upload upshot restart service
     template: src="{{ upshot_systemd_restart_service_src }}" dest="{{ upshot_systemd_restart_service_dest }}" mode="0755" owner="root"
       
+  - name: start the upshot.service
+    service: name="upshot.service" enabled="true" state="started"
+    
   - name: setup local facts
     file: dest="/etc/ansible/facts.d" recurse="yes" state="directory"
 
