@@ -42,6 +42,9 @@
   - name: create vcap user
     user: name="{{ upshot_user }}" uid="1000" comment="vcap user" createhome="yes" home="{{ upshot_home }}" group="{{ upshot_user }}" password="{{ ansible_password.stdout }}"
 
+  - name: ensure vcap home is 0755
+    file: dest="{{ upshot_home }}" state="directory" mode="0755"
+    
   - name: enable sudo mdata for vcap
     template: src="sudoers.d/vcap.j2" dest="{{ pkg_prefix_path }}/etc/sudoers.d/{{ upshot_user }}" mode="0440"
 
@@ -50,7 +53,7 @@
 
   - name: create libdir
     file: path="{{ upshot_libdir }}" mode="0755" owner="root" group="{{ wheel_group_name }}" state="directory" recurse="yes"
-    
+
   - name: upload upshot_include
     template: src="{{ item }}" dest="{{ upshot_libdir }}/{{ item }}" owner="root" group="root" mode="0755"
     with_items:
@@ -60,10 +63,10 @@
 
   - name: upload upshot restart service
     template: src="{{ upshot_systemd_restart_service_src }}" dest="{{ upshot_systemd_restart_service_dest }}" mode="0755" owner="root"
-      
+
   - name: start the upshot.service
     service: name="upshot.service" enabled="true" state="started"
-    
+
   - name: setup local facts
     file: dest="/etc/ansible/facts.d" recurse="yes" state="directory"
 
